@@ -1,4 +1,5 @@
 import os
+import math
 import cv2 as cv
 import hand_tracking_module as htm
 
@@ -7,15 +8,16 @@ import hand_tracking_module as htm
 # vid.set(3, width_cam)
 # vid.set(4, height_cam)
 
-rps_detector = htm.HandDetector()
+ges_detector = htm.HandDetector()
 
 fist_flag = True
+three_flag = True
 scissors_flag = True
-paper4_flag = True
-exit_flag = True
+kill_flag = True
+
 
 def rps_control(img, lm_list):
-    global fist_flag, scissors_flag, paper4_flag, exit_flag
+    global fist_flag, three_flag, scissors_flag ,kill_flag
     finger_tips = [4, 8, 12, 16, 20]
     finger_pips = [2, 6, 10, 14, 18]
     finger_positions = []
@@ -23,7 +25,10 @@ def rps_control(img, lm_list):
     index_mcp = (lm_list[5][1], lm_list[5][2])
     pinky_mcp = (lm_list[17][1], lm_list[17][2])
     thumb_tip = (lm_list[4][1], lm_list[4][2])
-    wrist = (lm_list[0][1], lm_list[0][2])
+
+    # For 'ok' gesture
+    index_tip = (lm_list[8][1], lm_list[8][2])
+    dist = math.hypot(thumb_tip[0] - index_tip[0], thumb_tip[1] - index_tip[1])
 
     # For Thumb
     if lm_list[4][1] > lm_list[3][1]:
@@ -39,59 +44,60 @@ def rps_control(img, lm_list):
             finger_positions.append(0)
 
     fist_statement = (finger_positions == [0, 0, 0, 0, 0] and index_mcp > pinky_mcp)
+    three_statement = (finger_positions == [0, 1, 1, 1, 0])
     scissors_statement = (finger_positions == [0, 1, 1, 0, 0])
-    paper4_statement = (finger_positions == [0, 0, 1, 1, 1])
-    exit_statement = (finger_positions == [0, 0, 0, 0, 1])
+    kill_statement = (finger_positions == [0, 0, 0, 0, 1])
 
     if fist_statement:
         for i in range(0, 21):
-            cv.circle(img, (lm_list[i][1], lm_list[i][2]), 20, (35, 68, 208), -1)
+            cv.circle(img, (lm_list[i][1], lm_list[i][2]), 20, (205,133,0), -1)
         if fist_flag:
             print("FIST")
-            os.system('START POWERPNT.EXE')
-            os.system('TASKKILL /IM WINWORD.EXE')
+            os.system('START BRAVE.EXE')
+            os.system('TASKKILL /IM CHROME.EXE')
+            scissors_flag = True
+            fist_flag = False
 
-
-    if scissors_statement:
+    if three_statement:
         cv.line(img, (lm_list[8][1], lm_list[8][2]), (lm_list[5][1], lm_list[5][2]), (200, 125, 0), 10)
         cv.line(img, (lm_list[12][1], lm_list[12][2]), (lm_list[9][1], lm_list[9][2]), (200, 125, 0), 10)
         cv.line(img, (lm_list[16][1], lm_list[16][2]), (lm_list[13][1], lm_list[13][2]), (200, 125, 0), 10)
         cv.line(img, (lm_list[5][1], lm_list[5][2]), (lm_list[9][1], lm_list[9][2]), (200, 125, 0), 10)
         cv.line(img, (lm_list[9][1], lm_list[9][2]), (lm_list[13][1], lm_list[13][2]), (200, 125, 0), 10)
 
+        if three_flag:
+            print("THREE")
+            os.system('START OPERA.EXE')
+            os.system('TASKKILL /IM BRAVE.EXE')
+            fist_flag = True
+            three_flag = False
+
+    if scissors_statement:
+        cv.line(img, (lm_list[8][1], lm_list[8][2]), (lm_list[5][1], lm_list[5][2]), (66, 111, 29), 10)
+        cv.line(img, (lm_list[12][1],lm_list[12][2]),(lm_list[9][1],lm_list[9][2]),(66, 111, 29), 10)
+        cv.line(img, (lm_list[5][1],lm_list[5][2]),(lm_list[9][1],lm_list[9][2]),(66, 111, 29), 10)
+
         if scissors_flag:
             print("SCISSORS")
-            os.system('START WINWORD.EXE')
-            os.system('TASKKILL /IM EXCEL.EXE')
-
-
-    if paper4_statement:
-        cv.line(img, (lm_list[8][1], lm_list[8][2]), (lm_list[5][1], lm_list[5][2]), (66, 111, 29), 10)
-        cv.line(img, pinky_mcp, (lm_list[20][1], lm_list[20][2]), (66, 111, 29), 10)
-        cv.line(img, index_mcp, pinky_mcp, (66, 111, 29), 10)
-        cv.line(img, pinky_mcp, wrist, (66, 111, 29), 10)
-        cv.line(img, index_mcp, wrist, (66, 111, 29), 10)
-        cv.line(img, wrist, (lm_list[1][1], lm_list[1][2]), (66, 111, 29), 10)
-        cv.line(img, thumb_tip, (lm_list[1][1], lm_list[1][2]), (66, 111, 29), 10)
-
-        if paper4_flag:
-            print("PAPER")
-            os.system('START EXCEL.EXE')
-            os.system('TASKKILL /IM POWERPNT.EXE')
-
-    if exit_statement:
-        for i in range(0, 21):
-            cv.circle(img, (lm_list[i][1], lm_list[i][2]), 20, (255 , 255 , 0), -1)
-        if exit_flag:
-            print('EXIT')
-            os.system('TASKKILL /IM WINWORD.EXE')
-            os.system('TASKKILL /IM POWERPNT.EXE')
-            os.system('TASKKILL /IM EXCEL.EXE')
-            fist_flag = False
+            os.system('START CHROME.EXE')
+            os.system('TASKKILL /IM OPERA.EXE')
+            three_flag = True
             scissors_flag = False
-            paper4_flag = False
-            exit_flag = False
+
+    if kill_statement:
+        for i in range(0, 21):
+            cv.circle(img, (lm_list[i][1], lm_list[i][2]), 20, (0,0,0), -1)
+        if kill_flag:
+            print("KILL")
+            os.system('TASKILL /IM BRAVE.EXE')
+            os.system('TASKKILL /IM CHROME.EXE')
+            os.system('TASKKILL /IM OPERA.EXE')
+            scissors_flag = False
+            three_flag = False
+            fist_flag = False
+            kill_flag = False
+            print("PROCESS TERMINATED")
 
 
-    # cv.imshow("RPS", img)
+    # cv.imshow("Gesture Control Test", img)
     # cv.waitKey(1)
