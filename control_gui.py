@@ -120,7 +120,7 @@ AppConBox.grid(row=3, column=1, pady=(0,15))
 RpsConBox = Text(frame2, width=24, height=6, bg="#222", fg="#fff", bd=0)
 RpsConBox.insert('end', 'Open and close applications    using symbols of   Rock,                 Paper & Scissors')
 RpsConBox.insert('end', '                                                   ')
-RpsConBox.insert('end', '                      Spotify | Brave | Teams')
+RpsConBox.insert('end', '                      Chrome | Brave | Opera')
 RpsConBox['state'] = DISABLED
 RpsConBox['font'] = font.Font(family='Open Sans', size=10)
 RpsConBox.grid(row=3, column=2, pady=(0, 15))
