@@ -67,7 +67,7 @@ def rps_control(img, lm_list):
 
         if three_flag:
             print("THREE")
-            os.system('START OPERA.EXE')
+            os.system('START FIREFOX.EXE')
             os.system('TASKKILL /IM BRAVE.EXE')
             fist_flag = True
             three_flag = False
@@ -80,7 +80,7 @@ def rps_control(img, lm_list):
         if scissors_flag:
             print("SCISSORS")
             os.system('START CHROME.EXE')
-            os.system('TASKKILL /IM OPERA.EXE')
+            os.system('TASKKILL /IM FIREFOX.EXE')
             three_flag = True
             scissors_flag = False
 
@@ -91,7 +91,7 @@ def rps_control(img, lm_list):
             print("KILL")
             os.system('TASKILL /IM BRAVE.EXE')
             os.system('TASKKILL /IM CHROME.EXE')
-            os.system('TASKKILL /IM OPERA.EXE')
+            os.system('TASKKILL /IM FIREFOX.EXE')
             scissors_flag = False
             three_flag = False
             fist_flag = False
