@@ -1,6 +1,5 @@
 # TODO: Make exe file (app)
 # TODO: Fine tune code (later)
-# TODO: Fix volume-control bug (later)
 import cv2 as cv
 import time
 
