@@ -6,6 +6,7 @@ import main_control as msc
 root = Tk()
 root.geometry('950x550')
 root.title('Gesture Application')
+root.iconbitmap("Z:/Projects.py/open_cv/gesture_control-Project/touch_.ico")
 root['bg'] = "#2c3647"
 
 primary_col = "#2c3647"
