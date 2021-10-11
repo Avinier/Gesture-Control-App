@@ -1,5 +1,3 @@
-# TODO: Make exe file (app)
-# TODO: Fine tune code (later)
 import cv2 as cv
 import time
 
@@ -9,7 +7,7 @@ import gesture_controls_module as gsc
 import rps_module as rps
 
 vid = cv.VideoCapture(0)
-width_cam, height_cam = 1000, 620
+width_cam, height_cam = 1000, 630
 vid.set(3, width_cam)
 vid.set(4, height_cam)
 
